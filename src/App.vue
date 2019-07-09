@@ -12,7 +12,7 @@
             type="text"
             class="form-control"
             v-model="swapRatio"
-            placeholder="0.7942"
+            v-bind:placeholder="Math.random().toFixed(3)"
           />
         </div>
       </div>
