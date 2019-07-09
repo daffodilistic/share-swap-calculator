@@ -51,7 +51,7 @@
           <input
             type="text"
             class="form-control"
-            v-model="startingPreSwapAmount"
+            v-model="startingAmount"
             placeholder="1100"
           />
         </div>
@@ -114,11 +114,11 @@ export default {
   components: {},
   data() {
     return {
-      swapRatio: 0.7942,
+      swapRatio: Math.random().toFixed(3),
       lotSize: 100,
       preSwapAmount: 0,
       postSwapAmount: 0,
-      startingPreSwapAmount: 1000,
+      startingAmount: 1000,
       allowOddLotsPurchase: false
     };
   },
@@ -127,24 +127,28 @@ export default {
       // console.log("Calculating...");
 
       this.preSwapAmount = 0;
-      var preSwapLotSize = this.lotSize;
-      var counter = this.startingPreSwapAmount;
+      // We have to parseInt() to ensure type safety, until Vue v3 is released...
+      var boardLotSize = parseInt(this.lotSize);
+      var initialAmount = parseInt(this.startingAmount);
+      var counter = 1;
       var found = false;
 
       if (this.allowOddLotsPurchase) {
-        preSwapLotSize = 1;
+        boardLotSize = 1;
       }
 
       while (!found) {
-        this.preSwapAmount = counter * preSwapLotSize;
-        // console.log("preSwapAmount is " + this.preSwapAmount);
         var postSwapShares = Math.trunc(this.preSwapAmount * this.swapRatio);
         if (postSwapShares != 0 && postSwapShares % this.lotSize == 0) {
           this.postSwapAmount = postSwapShares;
           // console.log("postSwapAmount is " + this.postSwapAmount);
           found = true;
+        } else {
+          this.preSwapAmount = counter * boardLotSize + initialAmount;
+          // console.log("preSwapAmount is " + this.preSwapAmount);
+
+          counter++;
         }
-        counter++;
       }
       // console.log("Done!");
     }
