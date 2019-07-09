@@ -1,6 +1,6 @@
 <template>
   <div id="app" class="container">
-    <h1 class="text-center">Share Merger/Swap Calculator</h1>
+    <h1 class="my-2 text-center">Share Merger/Swap Calculator</h1>
     <br />
     <div class="col mx-auto">
       <div class="row">
@@ -31,7 +31,7 @@
         </div>
       </div>
       <div class="row">
-        <div class="mx-auto mt-2 mb-0">
+        <div class="mx-auto my-2">
           <input
             type="checkbox"
             class="form-check-input"
@@ -41,6 +41,19 @@
           <label class="form-check-label" for="allowOddLotsPurchase">
             Allow Pre-Swap Odd Lots Purchase
           </label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <h4 class="text-center">Starting Pre-Swap Amount</h4>
+        </div>
+        <div class="col">
+          <input
+            type="text"
+            class="form-control"
+            v-model="startingPreSwapAmount"
+            placeholder="1100"
+          />
         </div>
       </div>
       <hr />
@@ -105,6 +118,7 @@ export default {
       lotSize: 100,
       preSwapAmount: 0,
       postSwapAmount: 0,
+      startingPreSwapAmount: 1000,
       allowOddLotsPurchase: false
     };
   },
@@ -114,7 +128,7 @@ export default {
 
       this.preSwapAmount = 0;
       var preSwapLotSize = this.lotSize;
-      var counter = 1;
+      var counter = this.startingPreSwapAmount;
       var found = false;
 
       if (this.allowOddLotsPurchase) {
@@ -123,7 +137,7 @@ export default {
 
       while (!found) {
         this.preSwapAmount = counter * preSwapLotSize;
-        console.log("preSwapAmount is " + this.preSwapAmount);
+        // console.log("preSwapAmount is " + this.preSwapAmount);
         var postSwapShares = Math.trunc(this.preSwapAmount * this.swapRatio);
         if (postSwapShares != 0 && postSwapShares % this.lotSize == 0) {
           this.postSwapAmount = postSwapShares;
