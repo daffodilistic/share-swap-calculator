@@ -64,12 +64,15 @@
           <button
             type="button"
             v-on:click="calculate"
-            class="btn btn-block btn-primary"
+            class="btn btn-lg btn-block btn-primary"
           >
             Calculate
           </button>
         </div>
       </div>
+    </div>
+    <div class="row justify-content-center mt-4">
+      <h6 class="small text-muted">Hand-crafted by <a href="https://www.twitter.com/daffodilistic" target="_blank">@daffodilistic</a></h6>
     </div>
   </div>
 </template>
