@@ -1,5 +1,6 @@
 # Share Swap Calculator
 A simple VueJS app to calculate minimum amount of shares to avoid getting odd lots
+[Demo Page](https://daffodilistic.github.io/share-swap-calculator/)
 
 ## Project setup
 ```
