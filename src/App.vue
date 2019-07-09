@@ -54,7 +54,7 @@
             type="text"
             disabled
             class="form-control"
-            v-model="preSwapAmount"
+            v-model="postSwapAmount"
           />
         </div>
       </div>
