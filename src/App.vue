@@ -30,6 +30,19 @@
           />
         </div>
       </div>
+      <div class="row">
+        <div class="mx-auto mt-2 mb-0">
+          <input
+            type="checkbox"
+            class="form-check-input"
+            v-model="allowOddLotsPurchase"
+            id="allowOddLotsPurchase"
+          />
+          <label class="form-check-label" for="allowOddLotsPurchase">
+            Allow Pre-Swap Odd Lots Purchase
+          </label>
+        </div>
+      </div>
       <hr />
       <div class="row">
         <div class="col">
@@ -72,7 +85,12 @@
       </div>
     </div>
     <div class="row justify-content-center mt-4">
-      <h6 class="small text-muted">Hand-crafted by <a href="https://www.twitter.com/daffodilistic" target="_blank">@daffodilistic</a></h6>
+      <h6 class="small text-muted">
+        Hand-crafted by
+        <a href="https://www.twitter.com/daffodilistic" target="_blank">
+          @daffodilistic
+        </a>
+      </h6>
     </div>
   </div>
 </template>
@@ -86,7 +104,8 @@ export default {
       swapRatio: 0.7942,
       lotSize: 100,
       preSwapAmount: 0,
-      postSwapAmount: 0
+      postSwapAmount: 0,
+      allowOddLotsPurchase: false
     };
   },
   methods: {
@@ -94,14 +113,20 @@ export default {
       // console.log("Calculating...");
 
       this.preSwapAmount = 0;
+      var preSwapLotSize = this.lotSize;
       var counter = 1;
       var found = false;
 
+      if (this.allowOddLotsPurchase) {
+        preSwapLotSize = 1;
+      }
+
       while (!found) {
-        this.preSwapAmount = counter * this.lotSize;
-        // console.log("preSwapAmount is " + this.preSwapAmount);
-        if ((this.preSwapAmount * this.swapRatio) % this.lotSize == 0) {
-          this.postSwapAmount = this.preSwapAmount * this.swapRatio;
+        this.preSwapAmount = counter * preSwapLotSize;
+        console.log("preSwapAmount is " + this.preSwapAmount);
+        var postSwapShares = Math.trunc(this.preSwapAmount * this.swapRatio);
+        if (postSwapShares != 0 && postSwapShares % this.lotSize == 0) {
+          this.postSwapAmount = postSwapShares;
           // console.log("postSwapAmount is " + this.postSwapAmount);
           found = true;
         }
