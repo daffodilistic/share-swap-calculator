@@ -1,6 +1,6 @@
 <template>
   <div id="swap-calculator" class="container">
-    <h1 class="my-2 text-center">Share Merger/Swap Calculator</h1>
+    <h3 class="my-2 text-center">Share Merger/Swap Calculator</h3>
     <br />
     <div class="col mx-auto">
       <div class="row">

@@ -12,32 +12,32 @@
     <ul class="nav nav-tabs" id="myTab" role="tablist">
       <li class="nav-item">
         <a
-          class="nav-link active"
+          class="nav-link"
           id="swap-tab"
           data-toggle="tab"
           href="#swap"
           role="tab"
           aria-controls="swap"
-          aria-selected="true"
+          aria-selected="false"
         >Swap Calculator</a>
       </li>
       <li class="nav-item">
         <a
-          class="nav-link"
+          class="nav-link active"
           id="arbitrage-tab"
           data-toggle="tab"
           href="#arbitrage"
           role="tab"
           aria-controls="arbitrage"
-          aria-selected="false"
+          aria-selected="true"
         >Arbitrage Calculator</a>
       </li>
     </ul>
     <div class="tab-content" id="myTabContent">
-      <div class="tab-pane fade show active" id="swap" role="tabpanel" aria-labelledby="swap-tab">
+      <div class="tab-pane fade" id="swap" role="tabpanel" aria-labelledby="swap-tab">
         <SwapCalculator />
       </div>
-      <div class="tab-pane fade" id="arbitrage" role="tabpanel" aria-labelledby="arbitrage-tab">
+      <div class="tab-pane fade show active" id="arbitrage" role="tabpanel" aria-labelledby="arbitrage-tab">
         <ArbitrageCalculator />
       </div>
     </div>
