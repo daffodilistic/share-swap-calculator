@@ -1,117 +1,59 @@
 <template>
   <div id="app" class="container">
-    <h1 class="my-2 text-center">Share Merger/Swap Calculator</h1>
-    <br />
-    <div class="col mx-auto">
-      <div class="row">
-        <div class="col">
-          <h4 class="text-center">Merger/Swap Ratio</h4>
-        </div>
-        <div class="col">
-          <input
-            type="text"
-            class="form-control"
-            v-model="swapRatio"
-            v-bind:placeholder="Math.random().toFixed(3)"
-          />
-        </div>
-      </div>
-      <br />
-      <div class="row">
-        <div class="col">
-          <h4 class="text-center">Board Lot Size</h4>
-        </div>
-        <div class="col">
-          <input
-            type="text"
-            class="form-control"
-            v-model="lotSize"
-            placeholder="100"
-          />
-        </div>
-      </div>
-      <div class="row">
-        <div class="mx-auto my-2">
-          <input
-            type="checkbox"
-            class="form-check-input"
-            v-model="allowOddLotsPurchase"
-            id="allowOddLotsPurchase"
-          />
-          <label class="form-check-label" for="allowOddLotsPurchase">
-            Allow Pre-Swap Odd Lots Purchase
-          </label>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col">
-          <h4 class="text-center">Starting Pre-Swap Amount</h4>
-        </div>
-        <div class="col">
-          <input
-            type="text"
-            class="form-control"
-            v-model="startingAmount"
-            placeholder="1100"
-          />
-        </div>
-      </div>
-      <hr />
-      <div class="row">
-        <div class="col">
-          <h4 class="text-center">Minimum Pre-Swap Amount</h4>
-        </div>
-        <div class="col">
-          <input
-            type="text"
-            disabled
-            class="form-control"
-            v-model="preSwapAmount"
-          />
-        </div>
-      </div>
-      <br />
-      <div class="row">
-        <div class="col">
-          <h4 class="text-center">Post-Swap Amount</h4>
-        </div>
-        <div class="col">
-          <input
-            type="text"
-            disabled
-            class="form-control"
-            v-model="postSwapAmount"
-          />
-        </div>
-      </div>
-      <br />
-      <div class="row">
-        <div class="col col-md-4 mx-auto">
-          <button
-            type="button"
-            v-on:click="calculate"
-            class="btn btn-lg btn-block btn-primary"
-          >
-            Calculate
-          </button>
-        </div>
-      </div>
-    </div>
     <div class="row justify-content-center mt-4">
       <h6 class="small text-muted">
         Hand-crafted by
-        <a href="https://www.twitter.com/daffodilistic" target="_blank">
-          @daffodilistic
-        </a>
+        <a
+          href="https://www.twitter.com/daffodilistic"
+          target="_blank"
+        >@daffodilistic</a>
       </h6>
+    </div>
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+      <li class="nav-item">
+        <a
+          class="nav-link active"
+          id="swap-tab"
+          data-toggle="tab"
+          href="#swap"
+          role="tab"
+          aria-controls="swap"
+          aria-selected="true"
+        >Swap Calculator</a>
+      </li>
+      <li class="nav-item">
+        <a
+          class="nav-link"
+          id="arbitrage-tab"
+          data-toggle="tab"
+          href="#arbitrage"
+          role="tab"
+          aria-controls="arbitrage"
+          aria-selected="false"
+        >Arbitrage Calculator</a>
+      </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+      <div class="tab-pane fade show active" id="swap" role="tabpanel" aria-labelledby="swap-tab">
+        <SwapCalculator />
+      </div>
+      <div class="tab-pane fade" id="arbitrage" role="tabpanel" aria-labelledby="arbitrage-tab">
+        <ArbitrageCalculator />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import ArbitrageCalculator from "./components/ArbitrageCalculator";
+import SwapCalculator from "./components/SwapCalculator";
+
 export default {
   name: "app",
-  components: {},
+  components: {
+    ArbitrageCalculator,
+    SwapCalculator
+  },
   data() {
     return {
       swapRatio: Math.random().toFixed(3),
