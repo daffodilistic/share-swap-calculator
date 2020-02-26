@@ -81,7 +81,12 @@
           <h4 class="text-center">Current Offeree Price</h4>
         </div>
         <div class="col">
-          <input type="text" class="form-control" v-model="swapData.currentOffereePrice" placeholder="1.2" />
+          <input
+            type="text"
+            class="form-control"
+            v-model="swapData.currentOffereePrice"
+            placeholder="1.2"
+          />
         </div>
       </div>
       <br />
@@ -90,7 +95,12 @@
           <h4 class="text-center">Offeree Entry Price</h4>
         </div>
         <div class="col">
-          <input type="text" class="form-control" v-model="swapData.offereeEntryPrice" placeholder="1.0" />
+          <input
+            type="text"
+            class="form-control"
+            v-model="swapData.offereeEntryPrice"
+            placeholder="1.0"
+          />
         </div>
       </div>
       <br />
@@ -103,11 +113,29 @@
           >Calculate</button>
         </div>
       </div>
+      <div id="result" class="row mt-3">
+        <div class="alert alert-info col-6 mx-auto">
+          <div class="row">
+            <div class="col-8 my-auto">
+              <h6 class="my-1 text-center">Implied Buyer Swap Price </h6>
+            </div>
+            <div class="col-4 my-auto">
+              {{ this.calculations.impliedBuyerSharePrice }}
+            </div>
+          </div>
+          <hr>
+          <div class="row">
+            <h4 class="mx-auto">{{ this.calculations.advice }}</h4>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import $ from "jquery";
+
 export default {
   name: "ArbitrageCalculator",
   components: {},
@@ -133,8 +161,15 @@ export default {
         currentOffereePrice: 1.2,
         offereeEntryPrice: 1.0,
         currentBuyerPrice: 1.4
+      },
+      calculations: {
+        impliedBuyerSharePrice: 0,
+        advice: ""
       }
     };
+  },
+  mounted() {
+    $("#result").hide(0);
   },
   methods: {
     loadSample(sampleIndex) {
@@ -143,18 +178,33 @@ export default {
     },
     calculate() {
       var currentSwapRatio =
-          (this.swapData.swapRatio *
-            (this.swapData.currentBuyerPrice /
-              this.swapData.buyerSwapPrice));
+        this.swapData.swapRatio *
+        (this.swapData.currentBuyerPrice / this.swapData.buyerSwapPrice);
       var impliedBuyerSharePrice =
         (this.swapData.offereeEntryPrice - this.swapData.cashConsideration) /
         currentSwapRatio;
-      
-      // console.log("currentSwapRatio is " + currentSwapRatio);
-      console.log("impliedBuyerSharePrice is " + impliedBuyerSharePrice);
 
-      // if impliedBuyerSharePrice > currentBuyerPrice, bad deal for child holders
+      // console.log("currentSwapRatio is " + currentSwapRatio);
+      // console.log("impliedBuyerSharePrice is " + impliedBuyerSharePrice);
+      // console.log("currentBuyerPrice is " + this.swapData.currentBuyerPrice);
+
+      var formatter = new Intl.NumberFormat('en-SG', {
+        style: 'currency',
+        currency: 'SGD',
+      });
+
+      this.calculations.impliedBuyerSharePrice = formatter.format(impliedBuyerSharePrice);
       
+      // if impliedBuyerSharePrice > currentBuyerPrice, bad deal for child holders
+      if (impliedBuyerSharePrice > this.swapData.currentBuyerPrice) {
+        this.calculations.advice = "Buyer price is better";
+      } else {
+        this.calculations.advice = "Offeree price is better";
+      }
+
+      $("#result").hide(0, () => {
+        $("#result").fadeIn();
+      });
     }
   }
 };
