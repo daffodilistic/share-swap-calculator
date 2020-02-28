@@ -115,17 +115,51 @@
       </div>
       <div id="result" class="row mt-3">
         <div class="alert alert-info col-6 mx-auto">
-          <div class="row">
-            <div class="col-8 my-auto">
-              <h6 class="my-1 text-center">Implied Buyer Swap Price </h6>
+          <div class="row justify-content-center">
+            <div class="my-auto">
+              <h6 class="my-1">Implied Buyer Swap Price:</h6>
             </div>
-            <div class="col-4 my-auto">
-              {{ this.calculations.impliedBuyerSharePrice }}
+            &nbsp;
+            <div class="my-auto">
+              {{ this.FORMATTER.format(this.swapData.currentBuyerPrice) }}
+            </div>
+          </div>
+          <div class="row justify-content-center">
+            <div class="my-auto">
+              <h6 class="my-1">Implied Swap Ratio:</h6>
+            </div>
+            &nbsp;
+            <div class="my-auto">
+              {{ this.calculations.impliedSwapRatio.toFixed(3) }}
+            </div>
+          </div>
+          <div class="row justify-content-center">
+            <div class="my-auto">
+              <h6 class="my-1">Implied Offeree Price:</h6>
+            </div>
+            &nbsp;
+            <div class="my-auto">
+              {{ this.FORMATTER.format(this.calculations.impliedOffereeSharePrice) }}
             </div>
           </div>
           <hr>
-          <div class="row">
-            <h4 class="mx-auto">{{ this.calculations.advice }}</h4>
+          <div class="row justify-content-center">
+            <div class="my-auto">
+              <h6 class="my-1 font-weight-bold">Implied Premium/Discount on Current Buyer Price:</h6>
+            </div>
+            &nbsp;
+            <div class="my-auto">
+              {{ this.FORMATTER.format(this.swapData.currentBuyerPrice - this.calculations.impliedBuyerSharePrice) }}
+            </div>
+          </div>
+          <div class="row justify-content-center">
+            <div class="my-auto">
+              <h6 class="my-1 font-weight-bold">Implied Premium/Discount on Offeree Entry Price:</h6>
+            </div>
+            &nbsp;
+            <div class="my-auto">
+              {{ this.FORMATTER.format(this.swapData.offereeEntryPrice - this.calculations.impliedOffereeSharePrice) }}
+            </div>
           </div>
         </div>
       </div>
@@ -140,15 +174,25 @@ export default {
   name: "ArbitrageCalculator",
   components: {},
   computed: {
-    BROKERAGE_FEES() {},
+    BROKERAGE_FEES() {
+      return 0.0025;
+    },
+    FORMATTER() {
+      const formatter = Object.freeze(new Intl.NumberFormat('en-SG', {
+        style: 'currency',
+        currency: 'SGD',
+      }));
+
+      return formatter;
+    },
     SAMPLE_DATA() {
       return {
         swapRatio: 0.72,
         cashConsideration: 0.259,
         buyerSwapPrice: 2.59,
-        currentOffereePrice: 2.03,
-        offereeEntryPrice: 1.8,
-        currentBuyerPrice: 2.44
+        currentBuyerPrice: 2.59,
+        currentOffereePrice: 2.1238,
+        offereeEntryPrice: 2.1238
       };
     }
   },
@@ -164,7 +208,8 @@ export default {
       },
       calculations: {
         impliedBuyerSharePrice: 0,
-        advice: ""
+        impliedSwapRatio: 0,
+        impliedOffereeSharePrice: 0
       }
     };
   },
@@ -174,33 +219,31 @@ export default {
   methods: {
     loadSample(sampleIndex) {
       // console.log("Sample loaded");
+      switch (sampleIndex) {
+        default:
+          break;
+      }
       this.swapData = this.SAMPLE_DATA;
     },
     calculate() {
-      var currentSwapRatio =
+      var impliedSwapRatio =
         this.swapData.swapRatio *
         (this.swapData.currentBuyerPrice / this.swapData.buyerSwapPrice);
       var impliedBuyerSharePrice =
         (this.swapData.offereeEntryPrice - this.swapData.cashConsideration) /
-        currentSwapRatio;
+        impliedSwapRatio;
+      var impliedOffereeSharePrice = 
+        this.swapData.currentOffereePrice - this.swapData.cashConsideration;
 
-      // console.log("currentSwapRatio is " + currentSwapRatio);
-      // console.log("impliedBuyerSharePrice is " + impliedBuyerSharePrice);
-      // console.log("currentBuyerPrice is " + this.swapData.currentBuyerPrice);
+      console.log("impliedSwapRatio is " + impliedSwapRatio);
+      console.log("impliedBuyerSharePrice is " + impliedBuyerSharePrice);
+      console.log("currentBuyerPrice is " + this.swapData.currentBuyerPrice);
 
-      var formatter = new Intl.NumberFormat('en-SG', {
-        style: 'currency',
-        currency: 'SGD',
-      });
-
-      this.calculations.impliedBuyerSharePrice = formatter.format(impliedBuyerSharePrice);
-      
-      // if impliedBuyerSharePrice > currentBuyerPrice, bad deal for child holders
-      if (impliedBuyerSharePrice > this.swapData.currentBuyerPrice) {
-        this.calculations.advice = "Buyer price is better";
-      } else {
-        this.calculations.advice = "Offeree price is better";
-      }
+      this.calculations = {
+        impliedSwapRatio: impliedSwapRatio,
+        impliedBuyerSharePrice: impliedBuyerSharePrice,
+        impliedOffereeSharePrice: impliedOffereeSharePrice
+      };
 
       $("#result").hide(0, () => {
         $("#result").fadeIn();
