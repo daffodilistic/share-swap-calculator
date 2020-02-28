@@ -161,6 +161,15 @@
               {{ this.FORMATTER.format(this.swapData.offereeEntryPrice - this.calculations.impliedOffereeSharePrice) }}
             </div>
           </div>
+          <div class="row justify-content-center">
+            <div class="my-auto">
+              <h6 class="my-1 font-weight-bold">Implied Premium/Discount on Current Offeree Price:</h6>
+            </div>
+            &nbsp;
+            <div class="my-auto">
+              {{ this.FORMATTER.format(this.swapData.currentOffereePrice - this.calculations.impliedOffereeSharePrice) }}
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -181,6 +190,7 @@ export default {
       const formatter = Object.freeze(new Intl.NumberFormat('en-SG', {
         style: 'currency',
         currency: 'SGD',
+        minimumFractionDigits: 3
       }));
 
       return formatter;
