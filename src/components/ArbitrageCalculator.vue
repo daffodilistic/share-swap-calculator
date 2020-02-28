@@ -150,6 +150,7 @@
             &nbsp;
             <div class="my-auto">
               {{ this.FORMATTER.format(this.swapData.currentBuyerPrice - this.calculations.impliedBuyerSharePrice) }}
+              ({{ (this.swapData.currentBuyerPrice / this.calculations.impliedBuyerSharePrice * 100 - 100).toFixed(1) }}%)
             </div>
           </div>
           <div class="row justify-content-center">
@@ -159,6 +160,7 @@
             &nbsp;
             <div class="my-auto">
               {{ this.FORMATTER.format(this.swapData.offereeEntryPrice - this.calculations.impliedOffereeSharePrice) }}
+              ({{ (this.swapData.offereeEntryPrice / this.calculations.impliedOffereeSharePrice * 100 - 100).toFixed(1) }}%)
             </div>
           </div>
           <div class="row justify-content-center">
@@ -168,6 +170,7 @@
             &nbsp;
             <div class="my-auto">
               {{ this.FORMATTER.format(this.swapData.currentOffereePrice - this.calculations.impliedOffereeSharePrice) }}
+              ({{ (this.swapData.currentOffereePrice / this.calculations.impliedOffereeSharePrice * 100 - 100).toFixed(1) }}%)
             </div>
           </div>
         </div>
